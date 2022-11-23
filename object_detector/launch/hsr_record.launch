@@ -1,0 +1,22 @@
+<launch>
+    <arg name="rosbag_start_delay" default="5.0" />
+    <arg name="save_name" default="1010_01"/>
+    <arg name="topic_name_rgb" default="/hsrb/head_rgbd_sensor/rgb/image_rect_color"/>
+    <arg name="topic_name_dpt" default="/hsrb/head_rgbd_sensor/depth_registered/image_rect_raw"/>
+    <arg name="topic_name_inf" default="/hsrb/head_rgbd_sensor/depth_registered/camera_info"/>
+
+    <node 
+        pkg="ytlab_hsr_modules" 
+        name="hsr_move_controller" 
+        type="hayashide/hsr_move.py" 
+        output="screen" 
+    />
+    <node
+        pkg="rosbag" 
+        name="record" 
+        type="record" 
+        args="-O /home/hayashide/catkin_ws/src/object_detector/rosbag/$(arg save_name).bag $(arg topic_name_rgb) $(arg topic_name_dpt) $(arg topic_name_inf)"
+        
+    />
+</launch>
+<!-- launch-prefix="bash -c 'sleep $(arg rosbag_start_delay); $0 $@' " -->

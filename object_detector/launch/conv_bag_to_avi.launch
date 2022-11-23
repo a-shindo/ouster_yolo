@@ -1,0 +1,24 @@
+<launch>
+    <arg name="bag_basename" default="0902_1_25222"/>
+    <arg name="avi_basename" default="0902_1_25222"/>
+
+    <arg name="bag_path" default="/media/hayashide/KIOXIA/hayashide/rosbag/$(arg bag_basename).bag"/>
+    <arg name="topic_name" default="/hsrb/head_rgbd_sensor/rgb/image_rect_color"/>
+    <arg name="fps" default="7"/>
+    <arg name="save_path" default="/home/hayashide/catkin_ws/src/object_detector/scripts/temp/sources/$(arg avi_basename).avi"/>
+
+
+    <node
+        pkg="image_view" 
+        name="video_recorder" 
+        type="video_recorder" 
+        output="screen" 
+        args="image:='$(arg topic_name)' _fps:='$(arg fps)' _filename:='$(arg save_path)'"
+    />
+    <node
+        pkg="rosbag" 
+        name="play" 
+        type="play" 
+        args="$(arg bag_path)"
+    />    
+</launch>

@@ -1,0 +1,3 @@
+[submodule "recog_opencv/third_party/realsense-ros"]
+	path = recog_opencv/third_party/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git

@@ -1,0 +1,8 @@
+prefix=/home/hayashide/catkin_ws/install
+
+Name: object_detector
+Description: Description of object_detector
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+object_detector/images
+object_detector/scripts/temp
+object_detector/scripts/test/images
+docker/config/ros_workspace/build
+docker/config/ros_workspace/devel
+object_detector/config
+object_detector/csv
+object_detector/scripts/simulator/results

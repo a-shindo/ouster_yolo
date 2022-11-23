@@ -1,0 +1,13 @@
+<launch>
+    <arg name="python_start_delay" default="0.0" />
+
+    <include file="$(find object_detector)/launch/realsense_435.launch" />
+
+    <node 
+        pkg="object_detector" 
+        name="camera" 
+        type="camera.py" 
+        output="screen" 
+        launch-prefix="bash -c 'sleep $(arg python_start_delay); $0 $@' "
+    />
+</launch>

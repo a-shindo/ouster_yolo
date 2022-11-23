@@ -1,0 +1,53 @@
+<launch>
+    <arg name="python_start_delay" default="3.0" />
+    <arg name="rviz_start_delay" default="5.0" />
+    <arg name="play_bag_name" default="0904_ohnishi"/>
+    <arg name="rosbag_start_delay" default="1.0" />
+
+
+    <!-- <include file="$(find object_detector)/launch/whill_realsense.launch" /> -->
+    <!-- Realsense Offset Broadcaster -->
+    <arg name="camera_angle" default="0.2617" />
+    <node ns="camera1" pkg="tf"	name="whill_base_footprint_to_camera1"
+    type="static_transform_publisher" args="0.55 -0.255 0.589 -$(arg camera_angle) 0 1.5707 /base_link /camera1_link 10" /> <!--right height: 0.53-0.059-->
+    <!-- Realsense Offset Broadcaster -->
+    <node 
+        ns="camera2" 
+        pkg="tf"	
+        name="whill_base_footprint_to_camera2"
+        type="static_transform_publisher" 
+        args="0.55 0.255 0.471 $(arg camera_angle) 0 -1.5707 /base_link /camera2_link 10" 
+    /> <!--left height: 0.53+0.059-->
+
+    <!-- for camera1 -->
+    <node 
+        pkg="object_detector" 
+        name="human_detector1" 
+        type="whill_human_detection.py" 
+        output="screen" 
+        launch-prefix="bash -c 'sleep $(arg python_start_delay); $0 $@' "
+        args="test1 right_down /camera1 /camera1_link"
+    >
+            <remap from="publisher_point" to="whill/human_tracking_point" />
+    </node>
+    <!-- for camera2 -->
+    <!-- <node 
+        pkg="object_detector" 
+        name="human_detector2" 
+        type="whill_human_detection.py" 
+        output="screen" 
+        launch-prefix="bash -c 'sleep $(arg python_start_delay); $0 $@' "
+        args="test2 left_down /camera2 /camera2_link"
+    >
+            <remap from="publisher_point" to="whill/human_tracking_point" />
+    </node> -->
+    
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find object_detector)/rviz/human_detection.rviz" launch-prefix="bash -c 'sleep $(arg rviz_start_delay); $0 $@' "/>
+    <node
+        pkg="rosbag" 
+        name="play" 
+        type="play" 
+        args="/mnt/ssd/rosbag/$(arg play_bag_name).bag"
+        launch-prefix="bash -c 'sleep $(arg rosbag_start_delay); $0 $@' "
+    />
+</launch>

@@ -1,0 +1,22 @@
+<launch>
+    <arg name="python_start_delay" default="5.0" />
+    <arg name="prefix" default="camera4"/>
+    <arg name="save_name" default="0902_6_14r_night_rd"/>
+
+    <include file="$(find object_detector)/launch/realsense_435.launch" />
+
+    <node 
+        pkg="object_detector" 
+        name="human_detector" 
+        type="human_detection.py" 
+        output="screen" 
+        launch-prefix="bash -c 'sleep $(arg python_start_delay); $0 $@' "
+        args="$(arg save_name)"
+    />
+    <node
+        pkg="rosbag" 
+        name="record" 
+        type="record" 
+        args="-O /mnt/ssd/rosbag/$(arg save_name).bag $(arg prefix)/camera/color/image_raw/ $(arg prefix)/camera/aligned_depth_to_color/image_raw $(arg prefix)/camera/depth/image_rect_raw $(arg prefix)/camera/depth/camera_info"
+    />
+</launch>

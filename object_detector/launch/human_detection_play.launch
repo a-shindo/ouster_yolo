@@ -1,0 +1,24 @@
+<launch>
+    <arg name="python_start_delay" default="5.0" />
+    <arg name="rosbag_start_delay" default="1.0" />
+    <arg name="prefix" default="camera4"/>
+    <arg name="play_bag_name" default="0902_6_34_1_chairs"/>
+    <arg name="save_name" default="play"/>
+
+
+    <node
+        pkg="object_detector" 
+        name="human_detector" 
+        type="saver_human_detection.py" 
+        output="screen" 
+        launch-prefix="bash -c 'sleep $(arg python_start_delay); $0 $@' "
+        args="$(arg save_name)"
+    />
+    <node
+        pkg="rosbag" 
+        name="play" 
+        type="play" 
+        args="/mnt/ssd/rosbag/$(arg play_bag_name).bag"
+        launch-prefix="bash -c 'sleep $(arg rosbag_start_delay); $0 $@' "
+    />
+</launch>
