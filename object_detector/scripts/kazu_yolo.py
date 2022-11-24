@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import numpy as np
 import cv2
+import rosbag
 import rospy
 import sys
 from sensor_msgs.msg import Image
