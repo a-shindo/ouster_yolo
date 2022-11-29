@@ -1,0 +1,24 @@
+<launch>
+    <arg name="bag_basename" default="_2022-10-25-17-35-13"/>
+    <arg name="avi_basename" default="_2022-10-25-17-35-13"/>
+    
+    <arg name="bag_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/ouster/$(arg bag_basename).bag"/>
+    <arg name="topic_name" default="/ouster/signal_image"/>
+    <arg name="fps" default="10"/>
+    <arg name="save_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/scripts/temp/sources/$(arg avi_basename).avi"/>
+
+    <node
+        pkg="image_view" 
+        name="video_recorder" 
+        type="video_recorder" 
+        output="screen" 
+        args="image:='$(arg topic_name)' _fps:='$(arg fps)' _filename:='$(arg save_path)'"
+    />
+    <node
+        pkg="rosbag" 
+        name="play" 
+        type="play" 
+        args="$(arg bag_path)"
+    />    
+</launch>
+
