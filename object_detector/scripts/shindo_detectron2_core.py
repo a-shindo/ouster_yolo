@@ -83,7 +83,7 @@ class Detector:
         (success,image)=cap.read()
         
         size=image.shape[1],image.shape[0]#shape[0]で高さ、shape[1]で幅、shape[2]はビットの深さ
-        
+        # print(size)
         if savePath:
             fourcc = cv2.VideoWriter_fourcc('m','p','4', 'v')
             video=cv2.VideoWriter(savePath,fourcc, 10.0,size)
