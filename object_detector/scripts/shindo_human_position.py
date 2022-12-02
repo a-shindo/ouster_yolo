@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import pandas as pd
 
 
 csv_path = f"/home/ytpc2017d/catkin_ws/src/object_detector/csv/_2022-10-25-17-35-13.csv"
@@ -18,6 +19,8 @@ box_center_x1= (data[1]+data[3])/2
 box_center_x= np.floor(box_center_x1) #小数点以下切り捨て
 box_center_y1= (data[2]+data[4])/2
 box_center_y= np.floor(box_center_y1)
-print(box_center_x, box_center_y)
+box_center_xy= pd.DataFrame(box_center_x, box_center_y)
+pd.set_option('display.max_rows', 132) #列を省略なしで表示,後ろの数字は表示する行数
+print(box_center_xy)
 
-center_3d=
+

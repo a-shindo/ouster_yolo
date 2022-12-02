@@ -1,0 +1,18 @@
+<launch>
+    <arg name="bag_basename" default="_2022-10-25-17-35-13"/>
+    
+    <arg name="bag_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/ouster/$(arg bag_basename).bag"/>
+    <arg name="topic_name1" default="/ouster/reflec_image"/>
+    <arg name="topic_name2" default="/ouster/range_image"/>
+    <arg name="fps" default="10"/>
+    
+    <node
+        pkg="rosbag" 
+        name="play" 
+        type="play" 
+        output="screen"
+        args="$(arg bag_path)"
+    />    
+</launch>
+
+

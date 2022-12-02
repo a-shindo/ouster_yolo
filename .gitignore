@@ -5,4 +5,5 @@ docker/config/ros_workspace/build
 docker/config/ros_workspace/devel
 object_detector/config
 object_detector/scripts/simulator/results
+object_detector/scripts/simulator/results2
 object_detector/ouster
