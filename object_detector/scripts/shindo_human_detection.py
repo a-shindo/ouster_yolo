@@ -16,6 +16,10 @@ from sensor_msgs.msg import Image
 #from sensor_msgs.msg import CameraInfo
 import message_filters
 from cv_bridge import CvBridge
+from ouster import client
+from importlib.metadata import metadata
+from contextlib import closing
+import logging
 
 # ROS preparation
 rospy.init_node('human_tracker')
@@ -82,12 +86,16 @@ def get_position(box_array,dpt_array,obj_people):#,proj_mtx
         ymax_dpt=row.ymax
         confidence=row.confidence
         bd_box=np.array(dpt_array[int(ymin_dpt):int(ymax_dpt),int(xmin_dpt):int(xmax_dpt)])
-        print(bd_box)
-        dpt=np.nanmedian(bd_box)
+        dpt=np.nanmedian(bd_box) # 中央値
         bd_center_y=int((ymin_dpt+ymax_dpt)/2)
         bd_center_x=int((xmin_dpt+xmax_dpt)/2)
-        center_3d=dpt*(np.array([bd_center_x,bd_center_y,1]).T)#np.linalg.pinv(proj_mtx),
-        #center_3d=dpt*np.dot(np.array([bd_center_x,bd_center_y,1]).T)#np.linalg.pinv(proj_mtx),
+        poi=(bd_center_x, bd_center_y)
+    
+        center_3d=dpt*(np.array([bd_center_x,bd_center_y,1]).T)
+        #np.linalg.pinv(proj_mtx),
+        print(dpt)
+        print([bd_center_x,bd_center_y,1])
+        print(center_3d)#center_3d=dpt*np.dot(np.array([bd_center_x,bd_center_y,1]).T)#np.linalg.pinv(proj_mtx),
         one_person={
             'xmin_dpt':int(xmin_dpt),
             'ymin_dpt':int(ymin_dpt),
@@ -171,10 +179,6 @@ def ImageCallback(box_data,dpt_data):#,info_data
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             pprint(exc_type, fname, exc_tb.tb_lineno)
-
-
-
-
 
 # topicName_rgb="/camera3/camera/color/image_raw"
 # topicName_dpt="/camera3/camera/aligned_depth_to_color/image_raw"
