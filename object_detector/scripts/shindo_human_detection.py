@@ -158,7 +158,7 @@ def ImageCallback(box_data,dpt_data):#,info_data
         box_array=np.nan_to_num(box_array)
         box_array= box_array[:, :, 0]
         #box_array=cv2.cvtColor(box_array,cv2.COLOR_BGR2GRAY)
-        dpt_array = np.frombuffer(dpt_data.data, dtype=np.uint8).reshape(dpt_data.height, dpt_data.width, -1)
+        dpt_array = np.frombuffer(dpt_data.data, dtype=np.float32).reshape(dpt_data.height, dpt_data.width, -1)
         dpt_array=np.nan_to_num(dpt_array)
         #proj_mtx=np.array(info_data.P).reshape(3,4)
         # object recognition
@@ -173,7 +173,6 @@ def ImageCallback(box_data,dpt_data):#,info_data
             #info_sub.unregister()
             end_func(1500)
             rospy.on_shutdown(end_func)
-
 
     except Exception:
             exc_type, exc_obj, exc_tb = sys.exc_info()

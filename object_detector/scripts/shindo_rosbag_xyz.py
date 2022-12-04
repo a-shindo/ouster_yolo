@@ -1,21 +1,23 @@
-import rosbag
-from geometry_msgs.msg import Point
-import pandas as pd
+import rospy
+from sensor_msgs.msg import Image  # Topicの型に合わせて引用
+import cv2
+import numpy as np
+import sensor_msgs.point_cloud2 as pc2
+import ros_numpy
 
-# The bag file should be in the same directory as your terminal
-bag = rosbag.Bag('./recorded-data.bag')
-topic = '/your_topic'
-column_names = ['x', 'y']
-df = pd.DataFrame(columns=column_names)
+def callback(data):  # 呼び出し関数
+    rospy.loginfo(data.data, dtype=np.float32)  # pythonのprint
+    # rospy.loginfo(np.array(pixelValue))
+    #img = ("/ouster/range_image")
+    #pixelValue = img[10, 20]
+    
+def listener():
+    rospy.init_node('listener')  # ('Node名')
+    rospy.Subscriber("/ouster/range_image", Image, callback)  # ("Topic名", 型, 関数)
+    rospy.spin()
 
-for topic, msg, t in bag.read_messages(topics=topic):
-    x = msg.x
-    y = msg.y
+if __name__ == '__main__':
+    listener()
 
-    df = df.append(
-        {'x': x,
-         'y': y},
-        ignore_index=True
-    )
 
-df.to_csv('out.csv')
+
