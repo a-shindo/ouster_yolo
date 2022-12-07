@@ -16,7 +16,6 @@ from sensor_msgs.msg import Image
 #from sensor_msgs.msg import CameraInfo
 import message_filters
 from cv_bridge import CvBridge
-from ouster import client
 from importlib.metadata import metadata
 from contextlib import closing
 import logging
@@ -26,6 +25,7 @@ rospy.init_node('human_tracker')
 
 # yolov5 model import
 model = torch.hub.load("/usr/local/lib/python3.8/dist-packages/yolov5", 'custom', path=os.environ['HOME']+'/catkin_ws/src/object_detector/config/best.pt',source='local')
+#model = torch.hub.load("/usr/local/lib/python3.8/dist-packages/yolov5", 'custom', path=os.environ['HOME']+'/catkin_ws/src/object_detector/config/yolov5/yolov5s.pt',source='local')
 
 # dpt history
 dpt_history=[]
@@ -93,9 +93,9 @@ def get_position(box_array,dpt_array,obj_people):#,proj_mtx
     
         center_3d=dpt*(np.array([bd_center_x,bd_center_y,1]).T)
         #np.linalg.pinv(proj_mtx),
-        print(dpt)
-        print([bd_center_x,bd_center_y,1])
-        print(center_3d)#center_3d=dpt*np.dot(np.array([bd_center_x,bd_center_y,1]).T)#np.linalg.pinv(proj_mtx),
+        #print(dpt)
+        #print([bd_center_x,bd_center_y,1])
+        #print(center_3d)#center_3d=dpt*np.dot(np.array([bd_center_x,bd_center_y,1]).T)#np.linalg.pinv(proj_mtx),
         one_person={
             'xmin_dpt':int(xmin_dpt),
             'ymin_dpt':int(ymin_dpt),
@@ -143,8 +143,8 @@ def end_func(thre):
         "vel_z_md":np.median(vel_list),
         "vel_z_sd":np.std(vel_list),
     }
-    print(vel_list)
-    print(np.average(vel_list))
+    #print(vel_list)
+    #print(np.average(vel_list))
     jsn=open(jsn_path,"w")
     json.dump(vel_info,jsn)
     jsn.close()
@@ -157,12 +157,18 @@ def ImageCallback(box_data,dpt_data):#,info_data
         box_array = np.frombuffer(box_data.data, dtype=np.uint8).reshape(box_data.height, box_data.width, -1)
         box_array=np.nan_to_num(box_array)
         box_array= box_array[:, :, 0]
-        #box_array=cv2.cvtColor(box_array,cv2.COLOR_BGR2GRAY)
-        dpt_array = np.frombuffer(dpt_data.data, dtype=np.float32).reshape(dpt_data.height, dpt_data.width, -1)
+        #box_array=cv2.cvtColor(box_array,cv2.COLOR_GRAY2RGBA)
+        dpt_array = np.frombuffer(dpt_data.data, dtype=np.uint8).reshape(dpt_data.height, dpt_data.width, -1)
         dpt_array=np.nan_to_num(dpt_array)
+        #print("dpt_array",dpt_array)
         #proj_mtx=np.array(info_data.P).reshape(3,4)
         # object recognition
         results=model(box_array)
+
+        # print(bd_boxes)
+        #results.render()
+        #cv2.imshow("detected",results.imgs[0])
+
         objects=results.pandas().xyxy[0]
         obj_people=objects[objects['name']=='person']
         rect_list=get_position(box_array,dpt_array,obj_people)#,proj_mtx
