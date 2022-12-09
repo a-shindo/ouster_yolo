@@ -57,6 +57,7 @@ def pub_sub():
     sub_list.append(dpt_sub)
     mf=message_filters.ApproximateTimeSynchronizer(sub_list,10,0.5)
     
+    
     # publisher
 
     # listener
@@ -65,7 +66,7 @@ def pub_sub():
 
     return mf
 
-def get_position(box_array,dpt_array,obj_people):#,proj_mtx
+def get_position(bd_box_array, dpt_array,obj_people):#,proj_mtx
     # リストの中に辞書が入っていて、その中に情報が埋め込まれてる
     """
     辞書の中身
@@ -78,7 +79,9 @@ def get_position(box_array,dpt_array,obj_people):#,proj_mtx
     6. center_3d
     7. confidence
     8. dpt
+
     """
+    global bd_center_x, bd_center_y
     rect_list=[]
 
     for i,row in enumerate(obj_people.itertuples()):
@@ -91,7 +94,7 @@ def get_position(box_array,dpt_array,obj_people):#,proj_mtx
         dpt=np.nanmedian(bd_box) # 中央値
         bd_center_y=int((ymin_dpt+ymax_dpt)/2)
         bd_center_x=int((xmin_dpt+xmax_dpt)/2)
-        poi=(bd_center_x, bd_center_y)
+        print("bd_center_x, bd_center_y", bd_center_x, bd_center_y)
     
         center_3d=dpt*(np.array([bd_center_x,bd_center_y,1]).T)
         #np.linalg.pinv(proj_mtx),
@@ -112,6 +115,8 @@ def get_position(box_array,dpt_array,obj_people):#,proj_mtx
         rect_list.append(one_person)
         print(one_person)
     return rect_list
+
+
 
 def writeLog(rect_list,now):
     if len(rect_list)>0:
@@ -151,7 +156,7 @@ def end_func(thre):
     json.dump(vel_info,jsn)
     jsn.close()
     pass
- 
+
 def ImageCallback(box_data,dpt_data):#,info_data
     try:
         # unpack arrays
@@ -187,6 +192,71 @@ def ImageCallback(box_data,dpt_data):#,info_data
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             pprint(exc_type, fname, exc_tb.tb_lineno)
 
+def PcdCallback(point_cloud):  
+    global bd_center_x, bd_center_y   
+    point_cloud = pc2()
+    point_cloud_list = pc2.read_points_list(point_cloud)
+    # print("point_cloud_list", point_cloud_list)
+    # print("len(point_cloud_list)", len(point_cloud_list))
+
+    point_cloud_list_1 = np.array(point_cloud_list)
+    # print(point_cloud_list_1.shape)
+    point_cloud_list_131072 = point_cloud_list_1.reshape([131072, 9])
+    point_cloud_list_1024_128 = point_cloud_list_1.reshape([1024, 128, 9])
+    point_cloud_list_128_1024 = point_cloud_list_1.reshape([128,1024, 9]) # こっちが正しい？
+    # point_cloud_list_9 = point_cloud_list_131072[131071, :]
+    # point_cloud_list_ = point_cloud_list_128_1024[:, :]
+    point_cloud_list_1 = point_cloud_list_131072[129, :]
+    point_cloud_list_2_1 = point_cloud_list_1024_128[1, 0,:]
+    # point_cloud_list_2_2 = point_cloud_list_1024_128[0, 129,:]
+    point_cloud_list_3_1 = point_cloud_list_128_1024[1, 0, :]
+    point_cloud_list_3_2 = point_cloud_list_128_1024[0, 129, :]
+    point_cloud_list_0_0 = point_cloud_list_128_1024[0, 0, :]
+    point_cloud_list_0_1023 = point_cloud_list_128_1024[0, 1023, :]
+    point_cloud_list_127_0 = point_cloud_list_128_1024[127, 0, :]
+    point_cloud_list_127_1023 = point_cloud_list_128_1024[127, 1023, :]
+
+    # marker_pub = rospy.Publisher("/visualization_marker", Marker, queue_size = 2)
+
+    marker = Marker()
+
+    marker.header.frame_id = "os_sensor"
+    marker.header.stamp = rospy.Time.now()
+
+    # set shape, Arrow: 0; Cube: 1 ; Sphere: 2 ; Cylinder: 3
+    marker.type = 2
+    marker.id = 0
+
+    # Set the scale of the marker
+    marker.scale.x = 0.3
+    marker.scale.y = 0.3
+    marker.scale.z = 0.3
+
+    # Set the color
+    marker.color.r = 0.0
+    marker.color.g = 1.0
+    marker.color.b = 0.0
+    marker.color.a = 1.0
+
+    # Set the pose of the marker
+    marker.pose.position.x = point_cloud_list_128_1024[bd_center_y, bd_center_x, 0]
+    marker.pose.position.y = point_cloud_list_128_1024[bd_center_y, bd_center_x, 1]
+    marker.pose.position.z = point_cloud_list_128_1024[bd_center_y, bd_center_x, 2]
+    # marker.pose.position = point_cloud_list_128_1024[bd_center_y, bd_center_x, 2]
+    # print("point_cloud_list_128_1024[127, 1, :]", point_cloud_list_128_1024[0, 1, :])
+    # print("point_cloud_list_128_1024[127, 1, 0]", point_cloud_list_128_1024[127, 1, 0])
+    # print("point_cloud_list_128_1024[127, 1, 1]", point_cloud_list_128_1024[127, 1, 1])
+    # print("point_cloud_list_128_1024[127, 1, 2]", point_cloud_list_128_1024[127, 1, 2])
+    # print("marker.pose.position.x", marker.pose.position)
+    # marker.pose.orientation.x = 0.0
+    # marker.pose.orientation.y = 0.0
+    # marker.pose.orientation.z = 0.0
+    # marker.pose.orientation.w = 1.0
+
+    # while not rospy.is_shutdown():
+    marker_pub.publish(marker)
+    # rospy.rostime.wallsleep(1.0)    
+
 # topicName_rgb="/camera3/camera/color/image_raw"
 # topicName_dpt="/camera3/camera/aligned_depth_to_color/image_raw"
 # topicName_camInfo="/camera3/camera/aligned_depth_to_color/camera_info"
@@ -199,4 +269,6 @@ topicName_dpt="/ouster/range_image"
 # subscribe
 mf=pub_sub()
 mf.registerCallback(ImageCallback)
+rospy.Subscriber("/ouster/points", PointCloud2, PcdCallback)
+marker_pub=rospy.Publisher("/visualization_marker", Marker, queue_size = 2)
 rospy.spin()

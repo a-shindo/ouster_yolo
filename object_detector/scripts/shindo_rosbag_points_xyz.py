@@ -23,7 +23,7 @@ def callback(point_cloud):  # 呼び出し関数
     # print(point_cloud_list_1.shape)
     point_cloud_list_131072 = point_cloud_list_1.reshape([131072, 9])
     point_cloud_list_1024_128 = point_cloud_list_1.reshape([1024, 128, 9])
-    point_cloud_list_128_1024 = point_cloud_list_1.reshape([128,1024, 9])
+    point_cloud_list_128_1024 = point_cloud_list_1.reshape([128,1024, 9]) # こっちが正しい？
     # point_cloud_list_9 = point_cloud_list_131072[131071, :]
     # point_cloud_list_ = point_cloud_list_128_1024[:, :]
     point_cloud_list_1 = point_cloud_list_131072[129, :]
