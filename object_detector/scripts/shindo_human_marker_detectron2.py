@@ -61,7 +61,9 @@ rospy.init_node('human_tracker')
 # dpt history
 dpt_history=[]
 rect_list=[]
+
 # csv
+csvPath=f'/home/ytpc2017d/catkin_ws/src/object_detector/csv2/xy.csv'
 # csv_path=os.environ['HOME']+"/catkin_ws/src/object_detector/monitor/results.csv"
 
 # json
@@ -257,6 +259,35 @@ def PcdCallback(point_cloud):
         #     marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][1]
         #     marker1.pose.position.z = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][2]
         print("marker1.pose.position.x", type(marker1.pose.position), marker1.pose.position.y)
+        
+        # plt.scatter(marker1.pose.position.x, marker1.pose.position.y)
+        
+        history=[]
+        i=0
+        if csvPath:
+            try:
+                x=marker1.pose.position.x
+                y=marker1.pose.position.y
+                x_time, y_time=np.insert(x,0,i),np.insert(y,0,i)
+                history.append(x)
+                history.append(y)
+
+            except IndexError:
+                try:
+                    x=np.full_like(x,np.nan)
+                    y=np.full_like(y,np.nan)
+                except UnboundLocalError:
+                    x=np.full((1,4),np.nan)
+                    y=np.full((1,4),np.nan)
+                x_time, y_time=np.insert(x,0,i),np.insert(y,0,i)
+                history.append(x_time)
+                history.append(y_time)
+            with open(csvPath, 'a') as f:
+                writer = csv.writer(f)
+                writer.writerow(history)
+            #np.savetxt(csvPath,history,delimiter=",")
+        # xyz_list=[marker1.pose.position.x,marker1.pose.position.y]
+        # print("1111111111111111111111111111111111111111111111111111111111",xyz_list)
 
         # x = (marker1.pose.position)
         # y = (marker1.pose.position.y)
@@ -283,7 +314,7 @@ def writeLog(rect_list,now):
     #         one_person.insert(len(one_person),0)
     #         dpt_history.append(one_person)
         
-    #     np.savetxt(csv_path,dpt_history,delimiter=",")
+    #     np.savetxt(csvPath,dpt_history,delimiter=",")
     pass
 
 
