@@ -9,4 +9,5 @@
 # modified environment variables
 export LD_LIBRARY_PATH='/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu:/usr/local/nvidia/lib:/usr/local/nvidia/lib64'
 export PKG_CONFIG_PATH='/opt/ros/noetic/lib/pkgconfig:/opt/ros/noetic/lib/x86_64-linux-gnu/pkgconfig'
-export PWD='/home/hayashide/catkin_ws/build'
+export PWD='/home/ytpc2017d/catkin_ws/build'
+export ROS_PACKAGE_PATH='/home/ytpc2017d/catkin_ws/src:/opt/ros/noetic/share'

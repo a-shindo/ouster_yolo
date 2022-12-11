@@ -6,6 +6,7 @@ import sys
 import json
 import time
 import numpy as np
+import csv
 import pandas as pd
 import cv2
 import rospy
@@ -59,7 +60,7 @@ rospy.init_node('human_tracker')
 
 # dpt history
 dpt_history=[]
-
+rect_list=[]
 # csv
 # csv_path=os.environ['HOME']+"/catkin_ws/src/object_detector/monitor/results.csv"
 
@@ -80,8 +81,8 @@ def pub_sub():
     sub_pub_list=[]
     reflec_sub=message_filters.Subscriber("/ouster/signal_image",Image)
     sub_pub_list.append(reflec_sub)
-    range_sub=message_filters.Subscriber("/ouster/range_image",Image)
-    sub_pub_list.append(range_sub)
+    pcd_sub=message_filters.Subscriber("/ouster/points",PointCloud2)
+    sub_pub_list.append(pcd_sub)
     # publisher
     # marker_pub=message_filters.("/visualization_marker",Marker)
     # sub_pub_list.append(marker_pub)
@@ -95,16 +96,16 @@ def pub_sub():
     return mf
 
 
-def ImageCallback(box_data,dpt_data):#,info_data
+def ImageCallback(signal_image_msg,pcd_msg):#,info_data
     global rect_list
     now=time.time()
-    cv_image = bridge.imgmsg_to_cv2(box_data, desired_encoding='bgr8')
+    cv_image = bridge.imgmsg_to_cv2(signal_image_msg, desired_encoding='bgr8')
     # print("cv_image",type(cv_image))
-    signal_array = np.frombuffer(box_data.data,dtype=np.uint8).reshape(box_data.height, box_data.width, -1)
+    signal_array = np.frombuffer(signal_image_msg.data,dtype=np.uint8).reshape(signal_image_msg.height, signal_image_msg.width, -1)
     signal_array=np.nan_to_num(signal_array)
  
-    dpt_array = np.frombuffer(dpt_data.data, dtype=np.uint8).reshape(dpt_data.height, dpt_data.width, -1)
-    dpt_array=np.nan_to_num(dpt_array)
+    # dpt_array = np.frombuffer(pcd_msg.data, dtype=np.uint8).reshape(pcd_msg.height, pcd_msg.width, -1)
+    # dpt_array=np.nan_to_num(dpt_array)
    
     obj_people=predictor(cv_image)
     viz=Visualizer(cv_image[:,:,::-1],
@@ -126,6 +127,8 @@ def ImageCallback(box_data,dpt_data):#,info_data
         # info_sub.unregister()
         end_func(1500)
         rospy.on_shutdown(end_func)
+
+    PcdCallback(pcd_msg)
 
     # except Exception:
             # exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -254,16 +257,14 @@ def PcdCallback(point_cloud):
         #     marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][1]
         #     marker1.pose.position.z = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][2]
         print("marker1.pose.position.x", type(marker1.pose.position), marker1.pose.position.y)
-        # data=np.float_(np.array(marker1.pose.position.x, marker1.pose.position.y))
-        # plt.plot(data[0], data[1], linestyle='solid', marker='o', color='red')
-        # plt.plot(data[0], data[3], linestyle='solid', marker='o', color='blue')
-        # # plt.savefig("")
-        # plt.show()
 
-        
-    #     # while not rospy.is_shutdown():
+        # x = (marker1.pose.position)
+        # y = (marker1.pose.position.y)
+        # plt.scatter(x, y)
+
         marker_pub.publish(marker1)
-    # # rospy.rostime.wallsleep(1.0)    
+    pcd_pub.publish(point_cloud)
+ 
     pass
 
 def writeLog(rect_list,now):
@@ -326,6 +327,7 @@ mf=pub_sub()
 # mf.registerCallback(ImageCallback_realsense)
 mf.registerCallback(ImageCallback)
 
-rospy.Subscriber("/ouster/points", PointCloud2, PcdCallback)
+# rospy.Subscriber("/ouster/points", PointCloud2, PcdCallback)
 marker_pub=rospy.Publisher("/visualization_marker", Marker, queue_size = 2)
+pcd_pub=rospy.Publisher("/ouster/points_processed", PointCloud2, queue_size = 1)
 rospy.spin()
