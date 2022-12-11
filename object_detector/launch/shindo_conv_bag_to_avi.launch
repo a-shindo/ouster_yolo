@@ -1,8 +1,8 @@
 <launch>
-    <arg name="bag_basename" default="_2022-10-25-17-35-13"/>
-    <arg name="avi_basename" default="_2022-10-25-17-35-13"/>
+    <arg name="bag_basename" default="_2022-10-18-20-01-09"/>
+    <arg name="avi_basename" default="_2022-10-18-20-01-09"/>
     
-    <arg name="bag_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/ouster/$(arg bag_basename).bag"/>
+    <arg name="bag_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/shindo_exp_1018/$(arg bag_basename).bag"/>
     <arg name="topic_name" default="/ouster/signal_image"/>
     <arg name="fps" default="10"/>
     <arg name="save_path" default="/home/ytpc2017d/catkin_ws/src/object_detector/scripts/temp/sources/$(arg avi_basename).avi"/>

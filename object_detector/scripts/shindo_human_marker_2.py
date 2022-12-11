@@ -167,53 +167,53 @@ def PcdCallback(point_cloud):
     # # marker1.pose.position.y = point_cloud_list_1024_128[400, 1, 1]
     # # marker1.pose.position.z = point_cloud_list_1024_128[400, 1, 2]
     print("rect_list", rect_list)
-    if len(rect_list)>0:
+    if len(rect_list)>300:
         print(pc.shape)
-        print([rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]])
-        print(pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]])
+        print([rect_list[300]["bd_center_y"], rect_list[30]["bd_center_x"]])
+        print(pc[rect_list[30]["bd_center_y"], rect_list[30]["bd_center_x"]])
         
-        if not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]][0] == 0 and not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]][1] == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]][2]
+        # if not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]][0] == 0 and not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]][1] == 0:
+        marker1.pose.position.x = pc[rect_list[300]["bd_center_y"], rect_list[300]["bd_center_x"]][0]
+        marker1.pose.position.y = pc[rect_list[300]["bd_center_y"], rect_list[300]["bd_center_x"]][1]
+        marker1.pose.position.z = pc[rect_list[300]["bd_center_y"], rect_list[300]["bd_center_x"]][2]
             # print("marker1.pose.position.x1", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]][0] == 0 and not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]][1]== 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]][2]
-            # print("marker1.pose.position.x2", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+1][0] == 0 and not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+1][1] == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+1][2]
-            # print("marker1.pose.position.x3", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]][0] == 0 and not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]][1] == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]][2]
-            # print("marker1.pose.position.x4", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]-1][0] == 0 and not pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]-1][1]-1 == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]-1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]-1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]-1][2]
-            # print("marker1.pose.position.x5", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]+1][0] == 0 and not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]+1][1] == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]+1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]+1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]+1][2]
-            # print("marker1.pose.position.x6", marker1.pose.position.x)
-        elif not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]+1][0] == 0 and not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]+1][1]+1 == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]+1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]+1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]+1][2]
-        elif not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]-1][0] == 0 and not pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]-1][1]-1 == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]-1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]-1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]+1, rect_list[0]["bd_center_x"]-1][2]
-        elif not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]-1][0] == 0 and not pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]-1][1]-1 == 0:
-            marker1.pose.position.x = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]-1][0]
-            marker1.pose.position.y = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]-1][1]
-            marker1.pose.position.z = pc[rect_list[0]["bd_center_y"]-1, rect_list[0]["bd_center_x"]-1][2]
+        # elif not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]][0] == 0 and not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]]["bd_center_x"][1]== 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]][2]
+        #     # print("marker1.pose.position.x2", marker1.pose.position.x)
+        # elif not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][0] == 0 and not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][1] == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][2]
+        #     # print("marker1.pose.position.x3", marker1.pose.position.x)
+        # elif not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][0] == 0 and not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]+1][1] == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]][2]
+        #     # print("marker1.pose.position.x4", marker1.pose.position.x)
+        # elif not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]-1][0] == 0 and not pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]-1][1]-1 == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]-1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]-1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"], rect_list[2]["bd_center_x"]-1][2]
+        #     # print("marker1.pose.position.x5", marker1.pose.position.x)
+        # elif not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]+1][0] == 0 and not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]+1][1] == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]+1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]+1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]+1][2]
+        #     # print("marker1.pose.position.x6", marker1.pose.position.x)
+        # elif not pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]+1][0] == 0 and not pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]+1][1]+1 == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]+1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]+1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]+1][2]
+        # elif not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]-1][0] == 0 and not pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]-1][1]-1 == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]-1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]-1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]+1, rect_list[2]["bd_center_x"]-1][2]
+        # elif not pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]-1][0] == 0 and not pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]-1][1]-1 == 0:
+        #     marker1.pose.position.x = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]-1][0]
+        #     marker1.pose.position.y = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]-1][1]
+        #     marker1.pose.position.z = pc[rect_list[2]["bd_center_y"]-1, rect_list[2]["bd_center_x"]-1][2]
         # else:
         #     marker1.pose.position.x = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][0]
         #     marker1.pose.position.y = pc[rect_list[0]["bd_center_y"], rect_list[0]["bd_center_x"]+2][1]
