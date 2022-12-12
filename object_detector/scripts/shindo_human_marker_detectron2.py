@@ -118,6 +118,20 @@ def ImageCallback(signal_image_msg,pcd_msg):#,info_data
     cv2.imshow("Result",output.get_image()[:,:,::-1])
     key=cv2.waitKey(1) & 0xFF
 
+    # frame_rate = 24.0 
+    # size = (128, 1024)
+    # fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+    # writer = cv2.VideoWriter('/home/ytpc2017d/catkin_ws/src/object_detector/scripts/temp/sources/_2022-10-25-17-38-44.mp4', fmt, frame_rate, size)
+    # while(output.isOpened()):
+    #     # 1フレーム毎　読込み
+    #     ret, frame = output.read()
+    #     writer.write(frame)
+# for videoPath in videos:
+    #     video_basename=os.path.basename(videoPath)
+    #     if video_basename[-4:]==".mp4":
+    #         (videoPath=videoPath,savePath=f"/home/ytpc2017d/catkin_ws/src/object_detector/scripts/temp/results2/{video_basename}")
+
+    
 
 
     rect_list=img_position(obj_people)
@@ -129,6 +143,7 @@ def ImageCallback(signal_image_msg,pcd_msg):#,info_data
         # info_sub.unregister()
         end_func(1500)
         rospy.on_shutdown(end_func)
+
 
     PcdCallback(pcd_msg)
 
